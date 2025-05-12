@@ -2,6 +2,7 @@ import { test, expect, Page } from '@playwright/test';
 import LoginPage from '../pages/LoginPage';
 import generateTestEmail from '../utils/rundomGenerator'
 import RegistrationPage from '../pages/RegistrationPage';
+import { Message } from '../utils/constants/messages';
 
 
 test.describe('Registration Form Validation', () => {
@@ -19,80 +20,52 @@ test.describe('Registration Form Validation', () => {
 
   test('All fields are required validation', async () => {
     const testData: Array<{ field: typeof registrationPage.name; errorMessage: string }> = [
-      { field: registrationPage.name, errorMessage: 'Name required' },
-      { field: registrationPage.lastName, errorMessage: 'Last name required' },
-      { field: registrationPage.email, errorMessage: 'Email required' },
-      { field: registrationPage.password, errorMessage: 'Password required' },
-      { field: registrationPage.repeatPassword, errorMessage: 'Re-enter password required' }
+      { field: registrationPage.name, errorMessage: Message.NAME_REQUIRED },
+      { field: registrationPage.lastName, errorMessage: Message.LAST_NAME_REQUIRED },
+      { field: registrationPage.email, errorMessage: Message.EMAIL_REQUIRED },
+      { field: registrationPage.password, errorMessage: Message.PASSWORD_REQUIRED },
+      { field: registrationPage.repeatPassword, errorMessage: Message.REPEAT_PASSWORD_REQUIRED },
     ];
 
     for (const { field, errorMessage } of testData) {
       await registrationPage.clickFieldAndBlur(field);
-      await expect.soft(registrationPage.isRegisterButtonDisabled()).toBeTruthy();
-      await expect.soft(registrationPage.expectFieldToHaveErrorMessage(errorMessage)).resolves.not.toThrow();
-      await expect.soft(registrationPage.expectFieldToHaveBorderColor(field, BORDER_COLOR_INVALID)).resolves.not.toThrow();
+      await registrationPage.expectInvalidField(field, errorMessage, BORDER_COLOR_INVALID);
     }
   });
 
   test('Name field validation', async () => {
     await registrationPage.fillName('A');
     await registrationPage.clickFieldAndBlur(registrationPage.name);
-
-    await expect.soft(registrationPage.isRegisterButtonDisabled()).toBeTruthy();
-    await expect.soft(registrationPage.expectFieldToHaveErrorMessage('Name has to be from 2 to 20 characters long')).resolves.not.toThrow();
-    await expect.soft(registrationPage.expectFieldToHaveBorderColor(registrationPage.name, BORDER_COLOR_INVALID)).resolves.not.toThrow();
+    await registrationPage.expectInvalidField(registrationPage.name, Message.NAME_HAS_TO_BE_FROM_2_TO_20_CHARACTERS_LONG, BORDER_COLOR_INVALID);
 
     await registrationPage.fillName('A@#');
-    await expect.soft(registrationPage.isRegisterButtonDisabled()).toBeTruthy();
-    await expect.soft(registrationPage.expectFieldToHaveErrorMessage('Name is invalid')).resolves.not.toThrow();
-    await expect.soft(registrationPage.expectFieldToHaveBorderColor(registrationPage.name, BORDER_COLOR_INVALID)).resolves.not.toThrow();
+    await registrationPage.expectInvalidField(registrationPage.name, Message.NAME_IS_INVALID, BORDER_COLOR_INVALID);
   });
 
   test('Last name field validation', async () => {
     await registrationPage.fillLastName('A');
     await registrationPage.clickFieldAndBlur(registrationPage.lastName);
-
-    await expect.soft(registrationPage.isRegisterButtonDisabled()).toBeTruthy();
-    await expect.soft(registrationPage.expectFieldToHaveErrorMessage('Last name has to be from 2 to 20 characters long')).resolves.not.toThrow();
-    await expect.soft(registrationPage.expectFieldToHaveBorderColor(registrationPage.lastName, BORDER_COLOR_INVALID)).resolves.not.toThrow();
+    await registrationPage.expectInvalidField(registrationPage.lastName, Message.LAST_NAME_HAS_TO_BE_FROM_2_TO_20_CHARACTERS_LONG, BORDER_COLOR_INVALID);
 
     await registrationPage.fillLastName('A@#');
-    await expect.soft(registrationPage.isRegisterButtonDisabled()).toBeTruthy();
-    await expect.soft(registrationPage.expectFieldToHaveErrorMessage('Last name is invalid')).resolves.not.toThrow();
-    await expect.soft(registrationPage.expectFieldToHaveBorderColor(registrationPage.lastName, BORDER_COLOR_INVALID)).resolves.not.toThrow();
+    await registrationPage.expectInvalidField(registrationPage.lastName, Message.LAST_NAME_IS_INVALID, BORDER_COLOR_INVALID);
   });
 
   test('Email field validation', async () => {
     await registrationPage.fillEmail('invalid-email');
     await registrationPage.clickFieldAndBlur(registrationPage.password);
 
-    await expect.soft(registrationPage.isRegisterButtonDisabled()).toBeTruthy();
-    await expect.soft(registrationPage.expectFieldToHaveErrorMessage('Email is incorrect')).resolves.not.toThrow();
-    await expect.soft(registrationPage.expectFieldToHaveBorderColor(registrationPage.email, BORDER_COLOR_INVALID)).resolves.not.toThrow();
+    await registrationPage.expectInvalidField(registrationPage.email, Message.EMAIL_IS_INCORRECT, BORDER_COLOR_INVALID);
   });
 
   test('Password field validation', async () => {
     await registrationPage.fillPassword('1234');
     await registrationPage.clickFieldAndBlur(registrationPage.password);
-
-    await expect.soft(registrationPage.isRegisterButtonDisabled()).toBeTruthy();
-    await expect.soft(
-      registrationPage.expectFieldToHaveErrorMessage(
-        'Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter'
-      )
-    ).resolves.not.toThrow();
-    await expect.soft(registrationPage.expectFieldToHaveBorderColor(registrationPage.password, BORDER_COLOR_INVALID)).resolves.not.toThrow();
+    await registrationPage.expectInvalidField(registrationPage.password, Message.PASSWORD_HAS_TO_BE_FROM_8_TO_15_CHARACTERS_LONG, BORDER_COLOR_INVALID);
 
     await registrationPage.fillPassword('12345678');
     await registrationPage.clickFieldAndBlur(registrationPage.repeatPassword);
-
-    await expect.soft(registrationPage.isRegisterButtonDisabled()).toBeTruthy();
-    await expect.soft(
-      registrationPage.expectFieldToHaveErrorMessage(
-        'Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter'
-      )
-    ).resolves.not.toThrow();
-    await expect.soft(registrationPage.expectFieldToHaveBorderColor(registrationPage.repeatPassword, BORDER_COLOR_INVALID)).resolves.not.toThrow();
+    await registrationPage.expectInvalidField(registrationPage.password, Message.PASSWORD_HAS_TO_BE_FROM_8_TO_15_CHARACTERS_LONG, BORDER_COLOR_INVALID);
   });
 
   test('Repeat password field validation', async () => {
@@ -100,9 +73,7 @@ test.describe('Registration Form Validation', () => {
     await registrationPage.fillRepeatPassword('Qwerty123!');
     await registrationPage.clickFieldAndBlur(registrationPage.lastName);
 
-    await expect.soft(registrationPage.isRegisterButtonDisabled()).toBeTruthy();
-    await expect.soft(registrationPage.expectFieldToHaveErrorMessage('Passwords do not match')).resolves.not.toThrow();
-    await expect.soft(registrationPage.expectFieldToHaveBorderColor(registrationPage.repeatPassword, BORDER_COLOR_INVALID)).resolves.not.toThrow();
+    await registrationPage.expectInvalidField(registrationPage.repeatPassword, Message.PASSWORDS_DO_NOT_MATCH, BORDER_COLOR_INVALID);
   });
 
   test('Successful registration', async () => {
@@ -117,6 +88,6 @@ test.describe('Registration Form Validation', () => {
 
     await expect(registrationPage.registerButton).toBeDisabled();
     const alertList = await registrationPage.getAlertList();
-    expect(alertList).toContain('Registration complete');
+    expect(alertList).toContain(Message.REGISTRATION_COMPLETE);
   });
 });
