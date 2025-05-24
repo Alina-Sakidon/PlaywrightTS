@@ -35,3 +35,4 @@ export class GaragePage extends BasePage {
         await this.addButton.click();
     }
 }
+export default GaragePage;
