@@ -1,11 +1,12 @@
 import { test, expect } from './fixtures';
 
-test('User can add a car to the garage', async ({ userGaragePage }) => {
-    const garagePage = userGaragePage;
-    
-    const countBefore = await garagePage.carListLocator.count();
-    await garagePage.addCar('Toyota', 'Corolla', '15000');
-    const countAfter = await garagePage.carListLocator.count();
 
-    expect(countAfter).toBeGreaterThan(countBefore);
+test('User can add a car to the garage', async ({ userGaragePage }) => {
+    const countBefore = await userGaragePage.carListLocator.count();
+    expect(countBefore).toBeGreaterThanOrEqual(0);
+
+    await userGaragePage.addCar('BMW', 'X5', '15000');
+
+    await expect(userGaragePage.carListLocator).toHaveCount(countBefore + 1);
 });
+

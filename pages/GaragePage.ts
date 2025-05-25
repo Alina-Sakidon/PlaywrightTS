@@ -11,12 +11,12 @@ export class GaragePage extends BasePage {
 
     constructor(page: Page, baseUrl?: string) {
         super(page, baseUrl ?? '');
-        this.carList = page.locator('.car-list');
+        this.carList = page.locator('.car-item');
         this.addCarButton = page.locator('button', { hasText: 'Add Car' });
         this.brandInput = page.locator('#addCarBrand');
         this.modelInput = page.locator('#addCarModel');
         this.mileageInput = page.locator('#addCarMileage');
-        this.addButton = page.locator('button', { hasText: 'Add' });
+        this.addButton = page.locator('//button[text()="Add"]');
     }
 
     get carListLocator() {
@@ -29,8 +29,8 @@ export class GaragePage extends BasePage {
 
     async addCar(brand: string, model: string, mileage: string) {
         await this.clickAddCar();
-        await this.brandInput.fill(brand);
-        await this.modelInput.fill(model);
+        await this.brandInput.selectOption( brand );
+        await this.modelInput.selectOption( model );
         await this.mileageInput.fill(mileage);
         await this.addButton.click();
     }
