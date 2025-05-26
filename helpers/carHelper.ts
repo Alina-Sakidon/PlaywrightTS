@@ -33,3 +33,23 @@ export async function createCar(
     return responseBody.data;
 }
 
+export async function deleteCar(
+    request: APIRequestContext,
+    carId: string
+) {
+    if (!cookiesValue) {
+        cookiesValue = `sid=${await loginHelper()}`;
+    }
+
+    const response = await request.delete(`${CARS_API_URL}/${carId}`, {
+        headers: {
+            cookie: cookiesValue,
+        },
+    });
+
+    if (!response.ok()) {
+        throw new Error("Failed to delete a car" + `: ${response.status()}`);
+    }
+    return response.status();
+}
+
