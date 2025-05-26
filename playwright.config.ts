@@ -37,7 +37,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      testMatch: ['!**/garageTest.spec.ts'],
+     // testMatch: ['!**/garageTest.spec.ts'],
       use: { ...devices['Desktop Chrome'] },
     },
 

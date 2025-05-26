@@ -6,6 +6,7 @@ export class ProfilePage extends BasePage {
     private profilePicture: Locator;
     private editProfileButton: Locator;
     private logoutButton: Locator;
+    private fullName: Locator;
 
     constructor(page: Page, baseUrl?: string) {
         super(page, baseUrl ?? '');
@@ -13,6 +14,7 @@ export class ProfilePage extends BasePage {
         this.profilePicture = page.locator('.profile-picture');
         this.editProfileButton = page.locator('button', { hasText: 'Edit Profile' });
         this.logoutButton = page.locator('button', { hasText: 'Logout' });
+        this.fullName = page.locator('p.profile_name');
     }
 
     async isProfileVisible(): Promise<boolean> {
@@ -27,5 +29,9 @@ export class ProfilePage extends BasePage {
     async clickLogout(): Promise<this> {
         await this.logoutButton.click();
         return this;
+    }
+
+    async getFullName(): Promise<string> {
+        return await this.fullName.textContent() || '';
     }
 }
