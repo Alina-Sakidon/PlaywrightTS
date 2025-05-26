@@ -7,3 +7,4 @@ export const BASE_PROFILE_URL = BASE_PANEL_URL + '/profile';
 export const BASE_API_URL = BASE_URL + '/api';
 export const PROFILE_API_URL = BASE_API_URL + '/users/profile';
 export const AUTH_API_URL = BASE_API_URL + '/auth/signin';
+export const CARS_API_URL = BASE_API_URL + '/cars';

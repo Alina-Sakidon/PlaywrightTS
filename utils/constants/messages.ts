@@ -1,5 +1,6 @@
 
 export enum Message {
+    //registration form
     NAME_REQUIRED = 'Name required',
     LAST_NAME_REQUIRED = 'Last name required',
     EMAIL_REQUIRED = 'Email required',
@@ -12,5 +13,8 @@ export enum Message {
     EMAIL_IS_INCORRECT = 'Email is incorrect',
     PASSWORD_HAS_TO_BE_FROM_8_TO_15_CHARACTERS_LONG = 'Password has to be from 8 to 15 characters long and contain at least one integer, one capital, and one small letter',
     PASSWORDS_DO_NOT_MATCH = 'Passwords do not match',
-    REGISTRATION_COMPLETE = 'Registration complete'
+    REGISTRATION_COMPLETE = 'Registration complete',
+
+    //car
+    FAILED_TO_CREATE_CAR = 'Failed to create car'
 }
