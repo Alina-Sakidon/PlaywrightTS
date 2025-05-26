@@ -1,11 +1,12 @@
 import { request } from 'playwright-core';
 import { Page } from '@playwright/test';
 import testUser from '../support/testsUser';
+import { AUTH_API_URL } from '../support/config';
 
 async function loginHelper(): Promise<string> {
     let sidValue = '';
     var client = await request.newContext();
-    var response = await client.post('https://qauto.forstudy.space/api/auth/signin', {
+    var response = await client.post(AUTH_API_URL, {
         data: {
             email: testUser.email,
             password: testUser.password,
