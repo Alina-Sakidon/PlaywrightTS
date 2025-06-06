@@ -19,7 +19,7 @@ jobs:
       - name: Build Playwright Docker image
         run: docker build -t playwright_tests_image .
 
-      - name: Run only API tests with secrets
+      - name: Run registration tests with secrets
         run: |
           docker run --rm \
             -e TEST_USER_EMAIL=${{ secrets.TEST_USER_EMAIL }} \
