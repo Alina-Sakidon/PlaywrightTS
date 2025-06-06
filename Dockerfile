@@ -7,4 +7,6 @@ RUN npm install
 
 COPY . .
 
+RUN npx playwright install --with-deps
+
 CMD ["npx", "playwright", "test", "tests/registrationForm.spec.ts"]
