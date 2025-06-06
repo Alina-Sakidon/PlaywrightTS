@@ -7,4 +7,4 @@ RUN npm install
 
 COPY . .
 
-CMD ["npx", "playwright", "test", "tests/api"]
+CMD ["npx", "playwright", "test", "tests/registrationForm.spec.ts"]
